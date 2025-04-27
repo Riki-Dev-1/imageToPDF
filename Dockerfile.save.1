@@ -1,0 +1,38 @@
+thon:3.9-alpine
+
+WORKDIR /app  
+
+# Copy the requirements file and install dependencies
+COPY requirements.txt .  
+RUN pip install --no-cache-dir -r requirements.txt  
+
+# Copy the application code
+COPY convert_image_to_pdf.py .  
+# Create the output directory if it doesn't exist
+RUN mkdir -p /app/output  
+
+# Set the environment variable for the PDF name (no spaces allowed in the variable name)
+ENV PDF_NAME="MyPDF"  
+# Command to run the Python script when the container starts
+CMD ["python", "convert_image_to_pdf.py"]  
+
+FROM python:3.9-alpine
+
+WORKDIR /app  # Set the working directory in the container
+
+# Copy the requirements file and install dependencies
+COPY requirements.txt .  # Copy requirements.txt to the working directory
+RUN pip install --no-cache-dir -r requirements.txt  # Install dependencies from requirements.txt
+
+# Copy the application code
+COPY convert_image_to_pdf.py .  # Copy the Python script to the working directory
+
+# Create the output directory if it doesn't exist
+RUN mkdir -p /app/output  # Ensure the 'output' directory exists for saving PDFs
+
+# Set the environment variable for the PDF name (no spaces allowed in the variable name)
+ENV PDF_NAME="MyPDF"  # This will be used as the default name for the output PDF
+
+# Command to run the Python script when the container starts
+CMD ["python", "convert_image_to_pdf.py"]  # Execute the Python script when the container starts
+
